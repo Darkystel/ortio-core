@@ -20,10 +20,7 @@ export class Command {
   /**
    * An identifier that opts into this command
    */
-  private _name: string;
-  get name(): string {
-    return this._name;
-  }
+  public name: string;
   /**
    * An initial handler to execute when this command is run without subcommands
    */
@@ -33,7 +30,7 @@ export class Command {
    */
   private subCommands: SubCommand[] = [];
   constructor(name: string) {
-    this._name = name;
+    this.name = name;
   }
   private initialExecution(message: Message, args: string[]) {
     message.reply("No execution was initialized to this command");
@@ -71,7 +68,7 @@ export class Command {
     }
     return this;
   }
-  public _exec(message: Message, args: string[]) {
+  public exec(message: Message, args: string[]) {
     const foundIndex = this.subCommands.findIndex(
       (subCommand) => subCommand.name === args[0]
     );
@@ -79,6 +76,7 @@ export class Command {
       this.initialHandler(message, args);
       return;
     } else {
+      args.shift();
       this.subCommands[foundIndex].handler(message, args);
       return;
     }
