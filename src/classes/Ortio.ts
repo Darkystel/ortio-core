@@ -1,10 +1,10 @@
 import { Client, Message } from "discord.js";
 import ora from "ora";
 import { readdirSync } from "fs";
-import { join } from "path";
+import { join, relative, resolve } from "path";
 import { Command } from "./Command";
-import { parse, ParsedMessage, BasicMessage } from "discord-command-parser";
-
+import { parse, ParsedMessage } from "discord-command-parser";
+const rexThisFile = /\bOrtio\.[tj]s:/i;
 export interface OrtioOptions {
   /**
    * Whether the command handler is enabled or not
@@ -37,16 +37,46 @@ export class Ortio {
    * Instance of client to be used for commands handled by this ortio instance
    */
   public client: Client;
+  private _root: string;
   private _options: Omit<OrtioOptions, "client"> = {
+    enabled: true,
     commandsPath: "./commands",
     filterRegex: /^\w+Command.(ts|js)$/,
     defaultPrefix: "&",
   };
+  private _commands: Command[] = [];
   constructor(
     options: Partial<Omit<OrtioOptions, "client">> &
       Pick<OrtioOptions, "client">
   ) {
-    this._options = { ...this._options, ...options };
+    const stackLines = new Error().stack?.split(/\r\n|\r|\n/);
+    if (stackLines) {
+      const line = stackLines.find(
+        (line, index) => index > 0 && !rexThisFile.test(line)
+      );
+      if (line) {
+        const splitDirname = line
+          .replace(/^\s*at\s*/, "")
+          .replace(/\w+\.[tj]s[:\d]+$/, "")
+          .replace(/^file:\/\//, "")
+          .split("/");
+        splitDirname.pop();
+        splitDirname.shift();
+        const instanceOfDirName = splitDirname.join("/");
+        this._root = relative(
+          __dirname,
+          instanceOfDirName.startsWith("/")
+            ? instanceOfDirName
+            : `/${instanceOfDirName}`
+        );
+      } else this._root = relative(__dirname, process.cwd());
+    } else this._root = relative(__dirname, process.cwd());
+
+    this._options = {
+      ...this._options,
+      ...options,
+    };
+
     this.client = options.client;
   }
   /**
@@ -58,7 +88,7 @@ export class Ortio {
   ) {
     const resolvingDirectorySpinner = ora("Resolving directory..").start();
     const files = readdirSync(
-      join(__dirname, this._options.commandsPath)
+      resolve(__dirname, join(this._root, this._options.commandsPath))
     ).filter((file) => this._options.filterRegex.test(file));
     resolvingDirectorySpinner.succeed();
     const importingFiles = ora("Importing command files..").start();
@@ -66,22 +96,28 @@ export class Ortio {
       files.map(
         async (file) =>
           await import(
-            join(this._options.commandsPath, file.replace(/(\.ts|\.js)/g, ""))
+            join(
+              this._root,
+              this._options.commandsPath,
+              file.replace(/(\.ts|\.js)/g, "")
+            )
           )
       )
     );
     const commands: Command[] = entities
       .map((entity) => {
         if (entity instanceof Command) return entity as Command;
-        if (
-          Object.prototype.hasOwnProperty.call(entity, "default") ||
-          entity.default instanceof Command
-        )
-          return entity as Command;
-        return undefined;
+        else {
+          for (const key in entity) {
+            if (Object.prototype.hasOwnProperty.call(entity, key)) {
+              if (entity[key] instanceof Command) return entity[key] as Command;
+            }
+          }
+        }
       })
       .filter((entity) => entity !== undefined && entity !== null) as Command[];
     importingFiles.succeed();
+    this._commands = commands;
     const attachingCommands = ora("Attaching commands..").start();
     this.client.on("message", (message: Message) => {
       if (!this._options.enabled) return;
@@ -93,8 +129,8 @@ export class Ortio {
       }
       if (parsed.success) {
         const { arguments: args } = parsed;
-        commands.forEach((command) => {
-          if (command.name) command._exec(message, args);
+        this._commands.forEach((command) => {
+          if (command.name) command.exec(message, args);
         });
       }
     });
@@ -111,6 +147,7 @@ export class Ortio {
     customParser?: (message: Message) => ParsedMessage<Message>
   ) {
     const attachingCommands = ora("Attaching commands..").start();
+    this._commands = commands;
     this.client.on("message", (message: Message) => {
       if (!this._options.enabled) return;
       let parsed: ParsedMessage<Message>;
@@ -121,8 +158,8 @@ export class Ortio {
       }
       if (parsed.success) {
         const { arguments: args } = parsed;
-        commands.forEach((command) => {
-          if (command.name) command._exec(message, args);
+        this._commands.forEach((command) => {
+          if (command.name) command.exec(message, args);
         });
       }
     });
