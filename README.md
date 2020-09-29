@@ -1,4 +1,4 @@
-# Ortio 1.0.0
+# Ortio 1.0.x
 
 A simple package that provides an easy to use development environment for command driven discord bots
 

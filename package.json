@@ -1,11 +1,16 @@
 {
   "name": "@ortio/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple package for creating discord bots",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Darkystel",
   "license": "MIT",
+  "keywords": [
+    "discord",
+    "typescript",
+    "commands"
+  ],
   "repository": "https://github.com/Darkystel/ortio-core.git",
   "devDependencies": {
     "@types/callsite": "^1.0.30",
