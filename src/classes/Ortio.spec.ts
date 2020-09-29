@@ -2,7 +2,7 @@ import { Command } from "./Command";
 import { mockClient, mockMessage } from "../mock";
 import { Ortio } from "./Ortio";
 import { Message } from "discord.js";
-jest.setTimeout(10000);
+jest.setTimeout(15000);
 test("Ortio", async () => {
   const client = await mockClient(process.env);
   const ortio = new Ortio({
