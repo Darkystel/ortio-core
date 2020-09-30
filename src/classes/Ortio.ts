@@ -118,6 +118,7 @@ export class Ortio {
       .filter((entity) => entity !== undefined && entity !== null) as Command[];
     importingFiles.succeed();
     this._commands = commands;
+    console.log(this._commands);
     const attachingCommands = ora("Attaching commands..").start();
     this.client.on("message", (message: Message) => {
       if (!this._options.enabled) return;
@@ -127,9 +128,11 @@ export class Ortio {
       } else {
         parsed = parse(message, this._options.defaultPrefix);
       }
+      console.log(parsed);
       if (parsed.success) {
         const { arguments: args } = parsed;
         this._commands.forEach((command) => {
+          console.log(command);
           if (command.name) command.exec(message, args);
         });
       }
