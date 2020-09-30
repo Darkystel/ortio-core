@@ -1,3 +1,7 @@
+**@ortio/core**
+
+> README / [Globals](globals.md)
+
 # Ortio 1.0.x
 
 A simple package that provides an easy to use development environment for command driven discord bots
@@ -64,7 +68,51 @@ ortio.manuallyAttachCommands(
 
 ## API
 
-### Ortio
+### **Class**: Command
+
+A class that defines a command
+
+#### Constructor
+
+\+ **new Command**(`name`: string)
+
+| Parameter | Type   | Description                                       |
+| --------- | ------ | ------------------------------------------------- |
+| `name`    | string | A special identifier associated with this command |
+
+---
+
+#### Methods
+
+▸ **setInitialCommandHandler**(`executionCallback`: CommandExecutionHandler): this
+
+This function overwrites whatever function is stored in this instance with a new function @param executionCallback
+
+##### Parameters:
+
+| Name                | Type                    | Description                                                                     |
+| ------------------- | ----------------------- | ------------------------------------------------------------------------------- |
+| `executionCallback` | CommandExecutionHandler | The function that will be executed when this command is run without subcommands |
+
+**Returns:** this
+
+---
+
+▸ **addSubCommand**(`name`: string, `executionCallback`: CommandExecutionHandler): this
+
+This function overwrites the subcommand with the new call back executionCallback if it exists
+or creates a new subcommand if none were found
+
+##### Parameters:
+
+| Name                | Type                    | Description                                          |
+| ------------------- | ----------------------- | ---------------------------------------------------- |
+| `name`              | string                  | Name of the subcommand                               |
+| `executionCallback` | CommandExecutionHandler | The function to be executed when this command is run |
+
+**Returns:** this
+
+---
 
 ## Todo
 
