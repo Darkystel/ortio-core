@@ -80,8 +80,6 @@ A class that defines a command
 | --------- | ------ | ------------------------------------------------- |
 | `name`    | string | A special identifier associated with this command |
 
----
-
 #### Methods
 
 ▸ **setInitialCommandHandler**(`executionCallback`: CommandExecutionHandler): this
@@ -95,8 +93,6 @@ This function overwrites whatever function is stored in this instance with a new
 | `executionCallback` | CommandExecutionHandler | The function that will be executed when this command is run without subcommands |
 
 **Returns:** this
-
----
 
 ▸ **addSubCommand**(`name`: string, `executionCallback`: CommandExecutionHandler): this
 
@@ -113,6 +109,66 @@ or creates a new subcommand if none were found
 **Returns:** this
 
 ---
+
+### **Class**: Ortio
+
+Ortio class that manages a discord client
+
+#### Constructor
+
+\+ **new Ortio**(`options`: OrtioOptions)
+
+**Options:**
+Name | Type | Default Value | Description
+------ | ------ | ------ |
+`client` | Discord.Client | none | **Required** The client instance that will be managed by Ortio |
+`commandsPath` | string | "./commands" | **Optional** The relative path to the commands directory |
+`defaultPrefix` | string | "&" | **Optional** The special prefix character to be used by the default parser |
+`enabled` | true | true | **Optional** If set to false, no commands will be forwarded to the command handlers |
+`filterRegex` | RegExp | /^\w+Command.(ts\|js)\$/ | **Optional** A filtering regex to apply to file names in the automatic import of commands |
+
+---
+
+#### Methods
+
+▸ **automaticallyComposeCommands**(`customParser?`: undefined \| (message: Message) => ParsedMessage\<Message>): Promise\<void>
+
+Automatically compose commands from the specified path on initialized options
+
+#### Parameters:
+
+| Name            | Type                                                       | Description                                        |
+| --------------- | ---------------------------------------------------------- | -------------------------------------------------- |
+| `customParser?` | undefined \| (message: Message) => ParsedMessage\<Message> | A custom parser to be used for extracting commands |
+
+**Returns:** Promise\<void>
+
+▸ **manuallyAttachCommands**(`commands`: Command[], `customParser?`: undefined \| (message: Message) => ParsedMessage\<Message>): void
+
+Manually attach the passed commands to the client
+
+#### Parameters:
+
+| Name            | Type                                                       | Description                                            |
+| --------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| `commands`      | Command[]                                                  | The commands to be attached to the client              |
+| `customParser?` | undefined \| (message: Message) => ParsedMessage\<Message> | A custome parser for extracting commands from messages |
+
+**Returns:** void
+
+▸ **enable**(): this
+
+Enable command execution
+
+**Returns:** this
+
+▸ **disable**(): this
+
+Disable command execution
+
+**Returns:** this
+
+[More docs..](./docs/globals.md)
 
 ## Todo
 
