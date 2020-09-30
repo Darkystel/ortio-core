@@ -8,30 +8,38 @@ const rexThisFile = /\bOrtio\.[tj]s:/i;
 export interface OrtioOptions {
   /**
    * Whether the command handler is enabled or not
+   * @type {boolean}
    * @default true
    */
   enabled?: boolean;
   /**
    * Relative paths to the commands directory for automatic composition
+   * @type {string}
    * @default "./commands"
    */
   commandsPath: string;
   /**
    * Regular expression used to validate file names and only import from required ones
+   * @type {RegExp}
    * @default /^\w+Command.(ts|js)$/
    */
   filterRegex: RegExp;
   /**
    * The prefix used for parsing message content
+   * @type {string}
    * @default "&"
    */
   defaultPrefix: string;
   /**
    * An instance of the discord client
+   * @type {Client}
    */
   client: Client;
 }
 
+/**
+ * Ortio class that manages a discord client
+ */
 export class Ortio {
   /**
    * Instance of client to be used for commands handled by this ortio instance
@@ -45,6 +53,10 @@ export class Ortio {
     defaultPrefix: "&",
   };
   private _commands: Command[] = [];
+  /**
+   *
+   * @param options Options that define this Ortio instance
+   */
   constructor(
     options: Partial<Omit<OrtioOptions, "client">> &
       Pick<OrtioOptions, "client">

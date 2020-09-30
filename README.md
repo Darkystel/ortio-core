@@ -62,6 +62,10 @@ ortio.manuallyAttachCommands(
 );
 ```
 
+## API
+
+### Ortio
+
 ## Todo
 
 - [ ] Add API docs
