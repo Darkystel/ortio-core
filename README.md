@@ -172,7 +172,7 @@ Disable command execution
 
 ## Todo
 
-- [ ] Add API docs
+- [x] Add API docs
 - [ ] Add test section
 
 ## License
