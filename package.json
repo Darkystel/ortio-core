@@ -1,5 +1,5 @@
 {
-  "name": "ortio-core",
+  "name": "@ortio/core",
   "version": "1.0.3",
   "description": "A simple package for creating discord bots",
   "main": "dist/index.js",
@@ -30,8 +30,5 @@
   "scripts": {
     "prepublish": "tsc",
     "test": "jest --passWithNoTests"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }
