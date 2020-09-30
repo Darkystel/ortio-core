@@ -18,7 +18,7 @@ import { Client } from "discord.js";
 import { Ortio } from "@ortio/core";
 // Or
 const { Client } = require("discord.js");
-const { Ortio } from require("@ortio/core");
+const { Ortio } = require("@ortio/core");
 
 // Create an instance of Client
 const client = new Client(/* ... */);
