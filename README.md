@@ -120,12 +120,12 @@ Ortio class that manages a discord client
 
 **Options:**
 Name | Type | Default Value | Description
------- | ------ | ------ |
-`client` | Discord.Client | none | **Required** The client instance that will be managed by Ortio |
-`commandsPath` | string | "./commands" | **Optional** The relative path to the commands directory |
-`defaultPrefix` | string | "&" | **Optional** The special prefix character to be used by the default parser |
-`enabled` | true | true | **Optional** If set to false, no commands will be forwarded to the command handlers |
-`filterRegex` | RegExp | /^\w+Command.(ts\|js)\$/ | **Optional** A filtering regex to apply to file names in the automatic import of commands |
+------ | ------ | ------ | ------
+`client` | Discord.Client | none | **Required** The client instance that will be managed by Ortio
+`commandsPath` | string | "./commands" | **Optional** The relative path to the commands directory
+`defaultPrefix` | string | "&" | **Optional** The special prefix character to be used by the default parser
+`enabled` | true | true | **Optional** If set to false, no commands will be forwarded to the command handlers
+`filterRegex` | RegExp | /^\w+Command.(ts\|js)\$/ | **Optional** A filtering regex to apply to file names in the automatic import of commands
 
 ---
 
